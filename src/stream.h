@@ -15,6 +15,23 @@
 #include <cstring>
 #include <cassert>
 
+
+#ifdef _WIN32
+#define REGEXP_INLINE inline
+#define TEST_INLINE inline
+
+#define likely(x)   (!!(x))
+#define unlikely(x) (!!(x))
+
+#else
+#define REGEXP_INLINE inline __attribute__((always_inline))
+#define TEST_INLINE inline __attribute__((always_inline))
+//#define TEST_INLINE __attribute__((noinline))
+
+#define likely(x)   __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+#endif
+
 namespace YAML {
 class Stream : private noncopyable {
  public:
@@ -89,7 +106,7 @@ class Stream : private noncopyable {
     int offset = m_mark.pos - m_lookahead.streamPos;
     auto dst = reinterpret_cast<uint32_t*>(out.data());
 
-    if (__builtin_expect(m_lookahead.available > 4 + offset, 1)) {
+    if (likely(m_lookahead.available > 4 + offset)) {
       auto src = reinterpret_cast<uint64_t*>(m_lookahead.buffer.data());
       dst[0] = src[0] >> (offset * 8);
     } else {

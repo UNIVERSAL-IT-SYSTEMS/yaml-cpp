@@ -33,7 +33,7 @@ void Scanner::SimpleKey::Invalidate() {
 
 // CanInsertPotentialSimpleKey
 bool Scanner::CanInsertPotentialSimpleKey() const {
-  if (__builtin_expect(m_simpleKeyAllowed, 1)) {
+  if (likely(m_simpleKeyAllowed)) {
     return !ExistsActiveSimpleKey();
   }
   return false;
@@ -44,7 +44,7 @@ bool Scanner::CanInsertPotentialSimpleKey() const {
 //   (there's allowed at most one per flow level, i.e., at the start of the flow
 // start token)
 bool Scanner::ExistsActiveSimpleKey() const {
-  if (__builtin_expect(!m_simpleKeys.empty(), 1)) {
+  if (likely(!m_simpleKeys.empty())) {
     return m_simpleKeys.top().flowLevel == GetFlowLevel();
   }
   return false;

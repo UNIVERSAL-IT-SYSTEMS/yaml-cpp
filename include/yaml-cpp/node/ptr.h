@@ -10,7 +10,6 @@ struct ref_holder {
 
    using holder = ref_holder<T, owned_region>;
 
-   __attribute__((always_inline))
   ~ref_holder() { release(); }
 
   ref_holder(T* ptr) {

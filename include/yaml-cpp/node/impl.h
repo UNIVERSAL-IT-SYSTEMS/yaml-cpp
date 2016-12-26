@@ -65,7 +65,7 @@ inline Node::Node(detail::node& node, detail::shared_memory pMemory)
 inline Node::~Node() {}
 
 inline void Node::ThrowOnInvalid() const {
-  if (__builtin_expect(!m_pMemory, 0)) { ThrowInvalidNode(); };
+  if (!m_pMemory) { ThrowInvalidNode(); };
 }
 
 inline void Node::EnsureNodeExists() const {

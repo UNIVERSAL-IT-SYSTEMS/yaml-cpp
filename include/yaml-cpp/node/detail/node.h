@@ -18,7 +18,6 @@ class node {
   node() : m_pRef(nullptr) {}
   void set_data(node_data *data) { m_pRef = data; }
 
-  __attribute__((noinline))
   ~node() {}
 
   node(const node&) = delete;
